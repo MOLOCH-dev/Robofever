@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
-
+import 'wifiConnect.dart';
 void main() {
   runApp(MyApp());
 }
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       initialRoute: HomePage.id,
       routes: {
         HomePage.id:(context)=>HomePage(),
+        wifiConnect.id:(context)=>wifiConnect(),
       },
     );
   }
