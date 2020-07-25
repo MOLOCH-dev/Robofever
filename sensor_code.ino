@@ -2,6 +2,7 @@
 //analog is 10 bit, reads values from 0 to 1023
 //analogwrite takes values between 0 to 255
 //We can use EEPROM to save server IP address, ssid, password. To be added
+//speed sensor functionality yet to be figured out
 #include <Ticker.h> //Ticker Library
 #include <EEPROM.h>
 const int analogInPin = A0;
