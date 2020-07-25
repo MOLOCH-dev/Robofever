@@ -4,7 +4,6 @@
 //We can use EEPROM to save server IP address, ssid, password. To be added
 #include <Ticker.h> //Ticker Library
 #include <EEPROM.h>
-#include <sstream>
 const int analogInPin = A0;
 const int temp_pin = 12;
 const int wlvl_pin = 13;
