@@ -178,7 +178,7 @@ int read_wlvl_eeprom(){
   int eeaddress = wlvl_calibration();
   if ((digitalRead(device_pin)==HIGH)){
     for (int i=0; i< eeaddress; i++){
-      wlvl_min = wlvl_min + int(EEPROM.read(i));
+      wlvl_min = wlvl_min + int((10**i)EEPROM.read(i));
       
     }
     delay(1000);
