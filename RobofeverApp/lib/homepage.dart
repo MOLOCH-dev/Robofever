@@ -3,8 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'RemotePage.dart';
 import 'wifiConnect.dart';
 import 'constants.dart';
+import 'RemoteSanitize.dart';
 
 
 
@@ -16,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  List<String> appliances = ['Cooler','Fan','Light'];
+  List<String> appliances = ['Cooler','Fan','Light','Sanitizer'];
   String Wifi;
   String Password;
 
@@ -87,6 +89,9 @@ class _DevCardState extends State<DevCard> {
     else if(widget.appliance == 'Light'){
       return Icon(MdiIcons.lightbulbCfl,color:shade,size: size,);
     }
+    else if(widget.appliance == 'Sanitizer'){
+      return Icon(MdiIcons.hospitalBox,color: shade,size: size,);
+    }
   }
 
   @override
@@ -99,7 +104,16 @@ class _DevCardState extends State<DevCard> {
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: (){
-          Navigator.pushNamed(context, wifiConnect.id);
+          if(ConnectedWifi != null){
+            if(widget.appliance == 'Cooler'){
+              Navigator.pushNamed(context, Remote.id);
+            }else if(widget.appliance == 'Sanitizer'){
+              Navigator.pushNamed(context, RemoteSanitizer.id);
+            }
+          }else{
+            Navigator.pushNamed(context, wifiConnect.id);
+            print(ConnectedWifi);
+          }
           print(widget.appliance);
         },
         child: Material(
@@ -140,6 +154,8 @@ class _DevCardState extends State<DevCard> {
                             setState(() {
                               stat = val;
                               print(val);
+                              if(val == true){
+                              }
                             });
                           },
                         ),
