@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'homepage.dart';
 import 'wifiConnect.dart';
+import 'package:robofever/RemotePage.dart';
+import 'package:robofever/RemoteSanitize.dart';
 void main() {
   runApp(MyApp());
 }
@@ -31,6 +34,8 @@ class MyApp extends StatelessWidget {
       routes: {
         HomePage.id:(context)=>HomePage(),
         wifiConnect.id:(context)=>wifiConnect(),
+        Remote.id:(context)=>Remote(),
+        RemoteSanitizer.id:(context)=>RemoteSanitizer(),
       },
     );
   }

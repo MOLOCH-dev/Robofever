@@ -9,17 +9,17 @@ import 'package:robofever/constants.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-Cooler device = Cooler();
+Sanitizer device = Sanitizer();
 
-class Remote extends StatefulWidget {
-  static String id = 'RemotePage';
+class RemoteSanitizer extends StatefulWidget {
+  static String id = 'RemoteSanitizer';
   double scale = 1.15;
 
   @override
-  _RemoteState createState() => _RemoteState();
+  _RemoteSanitizerState createState() => _RemoteSanitizerState();
 }
 
-class _RemoteState extends State<Remote> {
+class _RemoteSanitizerState extends State<RemoteSanitizer> {
   double elevated = 10;
   int Speed = 1;
   @override
@@ -28,6 +28,11 @@ class _RemoteState extends State<Remote> {
   }
 
   Widget build(BuildContext context) {
+
+    void callRemote(){
+      setState(() {});
+    }
+
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
@@ -73,12 +78,14 @@ class _RemoteState extends State<Remote> {
                         onPressed: () {
                           if (elevated == 2) {
                             elevated = 10;
-                            device.changePump(Status.OFF);
-                            device.changeSwing(Status.OFF);
+                            device.changeDoor(Door.CLOSED);
+                            device.changeUV(Status.OFF);
+                            device.changePower(Status.OFF);
                           } else {
                             elevated = 2;
-                            device.changePump(Status.ON);
-                            device.changeSwing(Status.ON);
+                            device.changeDoor(Door.CLOSED);
+                            device.changeUV(Status.OFF);
+                            device.changePower(Status.ON);
                           }
                           setState(() {});
                         },
@@ -104,97 +111,89 @@ class _RemoteState extends State<Remote> {
                       : MainAxisAlignment.center,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Visibility(
+                          visible: device.ModeState == Mode.AUTO,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    8,
+                                    orientation == Orientation.landscape
+                                        ? size.width * 0.032
+                                        : size.height * 0.032,
+                                    0,
+                                    0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (device.UVState == Status.OFF &&
+                                        elevated == 2) {
+                                      setState(() {
+                                        device.changeUV(Status.ON);
+                                      });
+                                    } else {
+                                      setState(() {
+                                        device.changeUV(Status.OFF);
+                                      });
+                                    }
+                                  },
+                                  child: ToggleButton(
+                                    Setting: 'UV Light',
+                                    icon: MdiIcons.waves,
+                                    State: device.UVState == Status.ON,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    0,
+                                    orientation == Orientation.landscape
+                                        ? size.width * 0.032
+                                        : size.height * 0.032,
+                                    0,
+                                    0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (device.DoorState == Door.OPEN &&
+                                        elevated == 2) {
+                                      setState(() {
+                                        device.changeDoor(Door.CLOSED);
+                                      });
+                                    } else {
+                                      setState(() {
+                                        device.changeDoor(Door.OPEN);
+                                      });
+                                    }
+                                  },
+                                  child: ToggleButton(
+                                    Setting: 'Door',
+                                    icon: MdiIcons.door,
+                                    State: device.DoorState == Door.CLOSED,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: device.ModeState == Mode.AUTO,
+                          child: Time(
+                            icon: MdiIcons.timer,
+                            Setting: 'Timer',
+                            callRemote: callRemote,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Speed',
+                            ' Mode ',
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontFamily: 'Ubuntu',
                                 fontSize: 20),
                           ),
                         ),
-                        Container(
-                          height: orientation == Orientation.landscape
-                              ? size.width * 0.2 * widget.scale
-                              : size.height * 0.2 * widget.scale,
-                          width: orientation == Orientation.landscape
-                              ? size.height * 0.2 * widget.scale
-                              : size.width * 0.2 * widget.scale,
-                          child: Material(
-                            color: Color(0xFFEAEAEB),
-                            borderRadius: BorderRadius.circular(10),
-                            type: MaterialType.button,
-                            child: Column(
-//                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (Speed < 3) {
-                                        Speed++;
-                                        setState(() {});
-                                      }
-                                    },
-                                    child: Container(
-                                        width: size.width * 0.2 * widget.scale,
-                                        child: Icon(
-                                          Icons.add,
-                                          size:
-                                              size.width * 0.07 * widget.scale,
-                                        )),
-                                  ),
-                                ),
-                                SizedBox(
-                                  child: Divider(
-                                    thickness: 2,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '$Speed',
-                                      style: TextStyle(
-                                        fontSize:
-                                            size.height * 0.035 * widget.scale,
-                                        fontFamily: 'Orbitron',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  child: Divider(
-                                    thickness: 2,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (Speed > 1) {
-                                        Speed--;
-                                        setState(() {});
-                                      }
-                                    },
-                                    child: Container(
-                                      width: size.width * 0.2 * widget.scale,
-                                      child: Icon(
-                                        Icons.remove,
-                                        size: size.width * 0.07 * widget.scale,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
                         Row(
                           children: [
                             Padding(
@@ -202,62 +201,42 @@ class _RemoteState extends State<Remote> {
                                   8,
                                   orientation == Orientation.landscape
                                       ? size.width * 0.032
-                                      : size.height * 0.032,
+                                      : size.height * 0.00,
                                   0,
                                   0),
                               child: GestureDetector(
                                 onTap: () {
-                                  if (device.swingState == Status.OFF &&
+                                  if (device.ModeState == Mode.AUTO &&
                                       elevated == 2) {
                                     setState(() {
-                                      device.changeSwing(Status.ON);
-                                    });
-                                  } else {
-                                    setState(() {
-                                      device.changeSwing(Status.OFF);
+                                      device.changeMode(Mode.MANUAL);
                                     });
                                   }
                                 },
-                                child: ToggleButton(
-                                  Setting: 'Swing',
-                                  icon: MdiIcons.airPurifier,
-                                  State: device.swingState == Status.ON,
-                                ),
+                                child:ToggleButton(icon: Icons.wb_auto,Setting: 'MANUAL',State: device.ModeState == Mode.MANUAL,),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.fromLTRB(
-                                  0,
+                                  8,
                                   orientation == Orientation.landscape
                                       ? size.width * 0.032
-                                      : size.height * 0.032,
+                                      : size.height * 0.0,
                                   0,
                                   0),
                               child: GestureDetector(
                                 onTap: () {
-                                  if (device.waterPumpState == Status.OFF &&
+                                  if (device.ModeState == Mode.MANUAL &&
                                       elevated == 2) {
                                     setState(() {
-                                      device.changePump(Status.ON);
-                                    });
-                                  } else {
-                                    setState(() {
-                                      device.changePump(Status.OFF);
+                                      device.changeMode(Mode.AUTO);
                                     });
                                   }
                                 },
-                                child: ToggleButton(
-                                  Setting: 'Pump',
-                                  icon: MdiIcons.waterPump,
-                                  State: device.waterPumpState == Status.ON,
-                                ),
+                                child:ToggleButton(icon: Icons.wb_auto,Setting: 'AUTO',State: device.ModeState == Mode.AUTO,),
                               ),
                             ),
                           ],
-                        ),
-                        Time(
-                          icon: MdiIcons.timer,
-                          Setting: 'Timer',
                         ),
                       ],
                     ),
@@ -319,7 +298,7 @@ class ToggleButton extends StatelessWidget {
                                 ? size.width * 0.017 * scale
                                 : size.height * 0.017 * scale,
                             color:
-                                State == true ? Colors.white : kLightTextColor),
+                            State == true ? Colors.white : kLightTextColor),
                       ),
                       Text(
                         State == true ? 'ON' : 'OFF',
@@ -348,9 +327,10 @@ class Time extends StatefulWidget {
   String Setting;
   double scale = 1;
   int TimeForTimer = device.time;
-  String timetoDisplay = '0';
+  String TimetoDisplay = '0';
+  Function callRemote;
 
-  Time({this.icon, this.Setting});
+  Time({this.icon, this.Setting,this.callRemote});
   @override
   _TimeState createState() => _TimeState();
 }
@@ -358,29 +338,32 @@ class Time extends StatefulWidget {
 class _TimeState extends State<Time> {
   void call(){
 //    setState(() {
-      start();
+    widget.callRemote();
+    start();
 //    });
   }
   void start(){
     widget.TimeForTimer = device.time;
     Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
-        if(widget.TimeForTimer < 1 || device.timerState == Status.OFF){
+        if(widget.TimeForTimer < 1 || device.TimerState == Status.OFF){
           t.cancel();
           setState(() {
             device.changeTimer(Status.OFF, device.time = 0);
+            device.changeUV(Status.OFF);
           });
+          widget.callRemote();
         }else{
           if(widget.TimeForTimer < 60){
-            widget.timetoDisplay = widget.TimeForTimer.toString();
+            widget.TimetoDisplay = widget.TimeForTimer.toString();
             widget.TimeForTimer = widget.TimeForTimer - 1;
           }else if(widget.TimeForTimer < 3600){
             int m = widget.TimeForTimer~/60;
             int s = widget.TimeForTimer - (60*m);
             if(m < 10){
-              widget.timetoDisplay ='0:0'+m.toString();
+              widget.TimetoDisplay ='0:0'+m.toString();
             }else{
-              widget.timetoDisplay ='0:'+m.toString();
+              widget.TimetoDisplay ='0:'+m.toString();
             }
             widget.TimeForTimer = widget.TimeForTimer - 1;
           }else{
@@ -389,9 +372,9 @@ class _TimeState extends State<Time> {
             int m = t ~/60;
             int s = t - (60*m);
             if(m<10){
-              widget.timetoDisplay = h.toString()+':0'+m.toString();
+              widget.TimetoDisplay = h.toString()+':0'+m.toString();
             }else{
-              widget.timetoDisplay = h.toString()+':'+m.toString()+':'+s.toString();
+              widget.TimetoDisplay = h.toString()+':'+m.toString()+':'+s.toString();
             }
             widget.TimeForTimer = widget.TimeForTimer - 1;
           }
@@ -421,7 +404,7 @@ class _TimeState extends State<Time> {
         child: Material(
           type: MaterialType.button,
           borderRadius: BorderRadius.circular(10),
-          color: device.timerState == Status.ON ? kRemoteON : Color(0xFFEAEAEB),
+          color: device.TimerState == Status.ON ? kRemoteON : Color(0xFFEAEAEB),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -431,7 +414,7 @@ class _TimeState extends State<Time> {
                   size: orientation == Orientation.landscape
                       ? size.height * 0.12 * widget.scale
                       : size.width * 0.12 * widget.scale,
-                  color: device.timerState == Status.ON ? Colors.white : Colors.black,
+                  color: device.TimerState == Status.ON ? Colors.white : Colors.black,
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
@@ -446,15 +429,15 @@ class _TimeState extends State<Time> {
                                 ? size.width * 0.017 * widget.scale
                                 : size.height * 0.017 * widget.scale,
                             color:
-                                device.timerState == Status.ON ? Colors.white : kLightTextColor),
+                            device.TimerState == Status.ON ? Colors.white : kLightTextColor),
                       ),
                       (device.time != null)
                           ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text('${widget.timetoDisplay}',style: TextStyle(color: Colors.white,fontFamily: 'Ubuntu',fontSize: 25,fontWeight: FontWeight.bold),),
+                          Text('${widget.TimetoDisplay}',style: TextStyle(color: Colors.white,fontFamily: 'Ubuntu',fontSize: 25,fontWeight: FontWeight.bold),),
                           SizedBox(
-                            width: size.width*0.15,
+                            width: size.width*0.14,
                           ),
                           Padding(
 //                        left: 70.0,
@@ -468,13 +451,13 @@ class _TimeState extends State<Time> {
                               activeTextColor: Colors.black54,
                               valueFontSize: orientation == Orientation.landscape? size.height*0.04:size.width*0.04,
                               toggleSize: 30.0,
-                              value: device.timerState == Status.ON,
+                              value: device.TimerState == Status.ON && device.PowerState == Status.ON,
                               borderRadius: 30.0,
                               padding: 8.0,
                               showOnOff: true,
                               onToggle: (val) {
                                 setState(() {
-                                  if(val == true){
+                                  if(val == true && device.PowerState == Status.ON){
                                     device.changeTimer(Status.OFF,null);
                                   }
                                   else{
@@ -563,6 +546,8 @@ class _TimerButtonState extends State<TimerButton> {
                 onTap: () {
                   device.changeTimer(
                       Status.ON, ((widget.hour * 60 * 60) + (widget.min * 60)));
+                  device.changeUV(Status.ON);
+                  device.changeDoor(Door.CLOSED);
                   widget.call();
                   print(device.time);
                 },

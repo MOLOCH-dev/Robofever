@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,19 +15,19 @@ class wifiConnect extends StatefulWidget {
 
 class _wifiConnectState extends State<wifiConnect> {
 
-  List<WifiNetwork> AvailableWifi2;
-  String Password;
-  List<WifiNetwork> AvailableWifi;
+  List<WifiNetwork> availableWifi2;
+  String password;
+  List<WifiNetwork> availableWifi;
   bool visibility = false;
   int index1=0;
   int length;
   bool showSpinner= false;
 
   void wifiList()async{
-    AvailableWifi = await WiFiForIoTPlugin.loadWifiList();
-    print('-------------------------------------------------------------------------------------${AvailableWifi.length}');
+    availableWifi = await WiFiForIoTPlugin.loadWifiList();
+    print('-------------------------------------------------------------------------------------${availableWifi.length}');
     setState(() {
-      length = AvailableWifi.length;
+      length = availableWifi.length;
     });
   }
 
@@ -39,15 +41,15 @@ class _wifiConnectState extends State<wifiConnect> {
   }
   Stream<List<WifiNetwork>> getWifiStatus() async* {
     print('Stream');
-    AvailableWifi2 = await WiFiForIoTPlugin.loadWifiList();
+    availableWifi2 = await WiFiForIoTPlugin.loadWifiList();
     ConnectedWifi = await WiFiForIoTPlugin.getSSID();
     print(ConnectedWifi);
     if (await WiFiForIoTPlugin.isEnabled() == false) {
-      AvailableWifi = null;
+      availableWifi = null;
       WiFiForIoTPlugin.setEnabled(true);
     }
-    print(AvailableWifi2);
-    yield AvailableWifi2;
+    print(availableWifi2);
+    yield availableWifi2;
   }
   Future<void> disconnectDialog()async{
     return showDialog<void>(
@@ -83,8 +85,8 @@ class _wifiConnectState extends State<wifiConnect> {
     );
   }
   void updateList()async{
-    AvailableWifi2 = await WiFiForIoTPlugin.loadWifiList();
-    if(AvailableWifi != AvailableWifi2){
+    availableWifi2 = await WiFiForIoTPlugin.loadWifiList();
+    if(availableWifi != availableWifi2){
       setState(() {});
     }
   }
@@ -115,17 +117,17 @@ class _wifiConnectState extends State<wifiConnect> {
                   height: visibility == true ?size.height*0.3:size.height*0.7,
                   child: StreamBuilder(
                     stream: getWifiStatus(),
-                    builder: (context,Wifinetwork) {
-                      if(AvailableWifi2 != null){
-                        AvailableWifi = AvailableWifi2;
-                        length = AvailableWifi.length;
+                    builder: (context,wifinetwork) {
+                      if(availableWifi2 != null){
+                        availableWifi = availableWifi2;
+                        length = availableWifi.length;
                       }
                       return new ListView.builder(
                           itemCount: length,
                           itemBuilder: (context,index){
                             return FlatButton(
                               onPressed: (){
-                                if(ConnectedWifi == AvailableWifi[index].ssid){
+                                if(ConnectedWifi == availableWifi[index].ssid){
                                   visibility = false;
                                   disconnectDialog();
                                 }
@@ -143,11 +145,11 @@ class _wifiConnectState extends State<wifiConnect> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('${AvailableWifi[index].ssid}',style: TextStyle(
+                                        Text('${availableWifi[index].ssid}',style: TextStyle(
                                           fontSize: 20
                                         ),
                                         ),
-                                        ConnectedWifi == AvailableWifi[index].ssid?Text('Connected',textAlign: TextAlign.start,style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),):Text(''),
+                                        ConnectedWifi == availableWifi[index].ssid?Text('Connected',textAlign: TextAlign.start,style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),):Text(''),
                                         Icon(
                                           Icons.wifi,
                                         )
@@ -172,7 +174,7 @@ class _wifiConnectState extends State<wifiConnect> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Text('Enter Password For ${AvailableWifi[index1].ssid}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                        child: Text('Enter Password For ${availableWifi[index1].ssid}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -180,7 +182,7 @@ class _wifiConnectState extends State<wifiConnect> {
                           obscureText: true,
                           decoration: kTextFieldDecoration,
                           onChanged: (value){
-                            Password = value;
+                            password = value;
                           },
                         ),
                       ),
@@ -192,13 +194,13 @@ class _wifiConnectState extends State<wifiConnect> {
                                 showSpinner = true;
                               });
                               WiFiForIoTPlugin.disconnect();
-                              bool connectionStatus = await WiFiForIoTPlugin.connect(AvailableWifi[index1].ssid,password: Password,security: NetworkSecurity.WPA,joinOnce: false);
+                              bool connectionStatus = await WiFiForIoTPlugin.connect(availableWifi[index1].ssid,password: password,security: NetworkSecurity.WPA,joinOnce: false);
                               print('-------------------------Status : $connectionStatus');
                               if(connectionStatus == false){
                                 showMyDialog();
                               }
                               else{
-                                ConnectedWifi = AvailableWifi[index1].ssid;
+                                ConnectedWifi = availableWifi[index1].ssid;
                               }
                               visibility = false;
                               setState(() {
