@@ -2,18 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'constants.dart';
+import 'package:robofever/widgets/widget.dart';
+import '../constants.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
-class wifiConnect extends StatefulWidget {
+class WifiConnect extends StatefulWidget {
   static String id = 'wifiConnect';
   @override
-  _wifiConnectState createState() => _wifiConnectState();
+  _WifiConnectState createState() => _WifiConnectState();
 }
 
-class _wifiConnectState extends State<wifiConnect> {
+class _WifiConnectState extends State<WifiConnect> {
 
   List<WifiNetwork> availableWifi2;
   String password;
@@ -42,8 +42,8 @@ class _wifiConnectState extends State<wifiConnect> {
   Stream<List<WifiNetwork>> getWifiStatus() async* {
     print('Stream');
     availableWifi2 = await WiFiForIoTPlugin.loadWifiList();
-    ConnectedWifi = await WiFiForIoTPlugin.getSSID();
-    print(ConnectedWifi);
+    sanitizerWifi = await WiFiForIoTPlugin.getSSID();
+    print(sanitizerWifi);
     if (await WiFiForIoTPlugin.isEnabled() == false) {
       availableWifi = null;
       WiFiForIoTPlugin.setEnabled(true);
@@ -72,7 +72,7 @@ class _wifiConnectState extends State<wifiConnect> {
                       ),
                       onPressed: (){
                         WiFiForIoTPlugin.disconnect();
-                        ConnectedWifi = null;
+                        sanitizerWifi = null;
                         Navigator.pop(context);
                       },
                     ),
@@ -99,7 +99,6 @@ class _wifiConnectState extends State<wifiConnect> {
   Widget build(BuildContext context) {
     updateList();
     final size = MediaQuery.of(context).size;
-    final orientation = MediaQuery.of(context).orientation;
     try{
       return Scaffold(
         appBar: AppBar(
@@ -127,7 +126,7 @@ class _wifiConnectState extends State<wifiConnect> {
                           itemBuilder: (context,index){
                             return FlatButton(
                               onPressed: (){
-                                if(ConnectedWifi == availableWifi[index].ssid){
+                                if(sanitizerWifi == availableWifi[index].ssid){
                                   visibility = false;
                                   disconnectDialog();
                                 }
@@ -149,7 +148,7 @@ class _wifiConnectState extends State<wifiConnect> {
                                           fontSize: 20
                                         ),
                                         ),
-                                        ConnectedWifi == availableWifi[index].ssid?Text('Connected',textAlign: TextAlign.start,style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),):Text(''),
+                                        sanitizerWifi == availableWifi[index].ssid?Text('Connected',textAlign: TextAlign.start,style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),):Text(''),
                                         Icon(
                                           Icons.wifi,
                                         )
@@ -200,7 +199,7 @@ class _wifiConnectState extends State<wifiConnect> {
                                 showMyDialog();
                               }
                               else{
-                                ConnectedWifi = availableWifi[index1].ssid;
+                                sanitizerWifi = availableWifi[index1].ssid;
                               }
                               visibility = false;
                               setState(() {

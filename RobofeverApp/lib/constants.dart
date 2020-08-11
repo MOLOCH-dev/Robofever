@@ -6,26 +6,11 @@ Color kOffShade = Colors.redAccent;
 Color kRemoteON = Color(0xFF061BFE);
 Color kLightTextColor = Color(0xFFC1BDC0);
 
-const kTextFieldDecoration = InputDecoration(
-  hintText: 'Enter your password.',
-  contentPadding:
-  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide:
-    BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide:
-    BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-);
 
-String ConnectedWifi;
+String sanitizerWifi;
+String fanWifi;
+String coolerWifi;
+String lightWifi;
 
 enum Status {ON,OFF}
 enum Door{OPEN,CLOSED}
@@ -33,73 +18,57 @@ enum Speed {one,two,three}
 enum Mode {MANUAL,AUTO}
 
 class Cooler{
-  Status powerState;
-  Speed speedState;
-  Status swingState;
-  Status modeState;
-  Status waterPumpState;
-  Status timerState;
-  int time;
+  static Status powerState= Status.OFF;
+  static Speed speedState= Speed.one;
+  static Status swingState= Status.OFF;
+  static Status modeState= Status.ON;
+  static Status waterPumpState = Status.OFF;
+  static Status timerState= Status.OFF;
+  static int time = 0;
 
-  Cooler(){
-    powerState = Status.OFF;
-    speedState = Speed.one;
-    waterPumpState = Status.OFF;
-    swingState = Status.OFF;
-    modeState = Status.ON;
-    timerState = Status.OFF;
-    time = 0;
-  }
-  bool changeSpeed(Speed state){
+  static void changeSpeed(Speed state){
     speedState = state;
   }
-  bool changePower(Status Power){
-    powerState = Power;
+  static void changePower(Status power){
+    powerState = power;
   }
-  bool changePump(Status Pump){
-    waterPumpState = Pump;
+  static void changePump(Status pump){
+    waterPumpState = pump;
   }
-  bool changeSwing(Status Swing){
-    swingState = Swing;
+  static void changeSwing(Status swing){
+    swingState = swing;
   }
-  bool changeMode(Status Mode){
-    modeState = Mode;
+  static void changeMode(Status mode){
+    modeState = mode;
   }
-  bool changeTimer(Status state, int timer){
+  static void changeTimer(Status state, int timer){
     time = timer;
     timerState = state;
   }
+
 }
 class Sanitizer{
-  Status PowerState;
-  Door DoorState;
-  Status UVState;
-  int time;
-  Status TimerState;
-  Mode ModeState;
+  static Status powerState= Status.OFF;
+  static Door doorState=Door.OPEN; 
+  static Status uvState= Status.OFF;
+  static int time = 0;
+  static Status timerState = Status.OFF;
+  static Mode modeState= Mode.MANUAL;
 
-  Sanitizer(){
-    DoorState = Door.OPEN;
-    UVState = Status.OFF;
-    TimerState = Status.OFF;
-    time = 0;
-    ModeState = Mode.AUTO;
-    PowerState = Status.OFF;
+  static void changeDoor(Door state){
+    doorState = state;
   }
-  bool changeDoor(Door state){
-    DoorState = state;
+  static void changePower(Status state){
+    powerState = state;
   }
-  bool changePower(Status state){
-    PowerState = state;
+  static void changeUV(Status uv){
+    uvState = uv;
   }
-  bool changeUV(Status UV){
-    UVState = UV;
-  }
-  bool changeTimer(Status state, int timer){
+  static void changeTimer(Status state, int timer){
     time = timer;
-    TimerState = state;
+    timerState = state;
   }
-  bool changeMode(Mode state){
-    ModeState = state;
+  static void changeMode(Mode state){
+    modeState = state;
   }
 }
