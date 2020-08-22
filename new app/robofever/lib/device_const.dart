@@ -4,14 +4,21 @@ import 'package:robofever/Cooler.dart';
 import 'package:robofever/sanitizer.dart';
 
 enum state{ON,OFF}
+enum mode{AUTO,MANUAL}
+enum auto{SUMMER,WINTER,MONSOON,NONE}
+enum speed{ONE,TWO,THREE}
 
 Color kOnShade = Color(0xFF2A8947);
 Color kOffShade = Colors.redAccent;
+Color kRemoteON = Color(0xFF061BFE);
+Color kLightTextColor = Color(0xFFC1BDC0);
 
 
 class SanitizerConst{
   String name='Sanitizer';
   state powerstate=state.ON;
+  mode modeT = mode.MANUAL;
+  auto autoMode=auto.NONE;
   state wificonnect=state.OFF;
   Icon displayIcon(size){
     return Icon(
@@ -44,7 +51,12 @@ class FanConst{
 class CoolerConst{
   String name='Cooler';
   state powerstate=state.OFF;
+  mode modeT = mode.MANUAL;
+  auto autoMode=auto.NONE;
   state wificonnect=state.OFF;
+  int speed=1;
+  state pump=state.OFF;
+  state swing=state.ON;
   Icon displayIcon(size){ 
     return Icon(
         MdiIcons.snowflake,

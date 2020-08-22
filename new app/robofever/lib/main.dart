@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robofever/Cooler.dart';
 import 'package:robofever/sanitizer.dart';
+import 'package:robofever/wifiConnect.dart';
 
 import './homepage.dart';
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         HomePage.id:(context)=>HomePage(),
         Sanitizer.id:(context)=>Sanitizer(),
         Cooler.id:(context)=>Cooler(),
+        WifiConnect.id:(context)=>WifiConnect(),
       },
     );
   }
