@@ -134,39 +134,8 @@ class _DevCardState extends State<DevCard> {
                           padding: EdgeInsets.fromLTRB(
                               size.width * 0.01, 0.0, 0.0, size.width * 0.08),
                           child: FlutterSwitch(
-                            width: orientation == Orientation.landscape
-                                ? size.height * 0.2
-                                : size.width * 0.2,
-                            height: orientation == Orientation.landscape
-                                ? size.height * 0.1
-                                : size.width * 0.1,
-                            inactiveColor: Colors.deepOrange,
-                            activeColor: Colors.greenAccent,
-                            activeTextColor: Colors.black54,
-                            valueFontSize: orientation == Orientation.landscape
-                                ? size.height * 0.03
-                                : size.width * 0.03,
-                            toggleSize: 30.0,
-                            value: Sanitizer.powerState==Status.ON?true:false,
-                            borderRadius: constraints.maxHeight * 0.1,
-                            padding: constraints.maxHeight * 0.05,
-                            showOnOff: true,
-                            activeText: 'On',
-                            inactiveText: 'Off',
-                            onToggle: (val) {
-                              setState(() {
-                                stat = val;
-                                print(val);
-                                if (val == true) {
-                                  Sanitizer.powerState=Status.ON;
-                                }else{
-                                  Sanitizer.powerState=Status.OFF;
-                                }
-                                setState(() {
-                                  
-                                });
-                              });
-                            },
+                            
+                            
                           ),
                         ),
                       ],
