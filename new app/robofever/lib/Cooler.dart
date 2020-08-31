@@ -12,6 +12,7 @@ class Cooler extends StatefulWidget {
 }
 
 class _CoolerState extends State<Cooler> {
+  static String widget_name='Cooler';
   @override
   Widget build(BuildContext context) {
     final CoolerConst device = ModalRoute.of(context).settings.arguments;
@@ -383,7 +384,15 @@ class _CoolerState extends State<Cooler> {
                                             color: Colors.lightGreen[200],
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20))),
-                                        child: Text("timer"),
+                                        child: RaisedButton(
+                                          onPressed:(){
+                                            Navigator.pushReplacementNamed(context, '/timer',arguments: {
+                                              'widget': widget_name,
+                                            }
+                                            );
+                                          },
+                                          child: Text('TIMER BUTTON'),
+                                        ),
                                       )
                                     ],
                                   )
