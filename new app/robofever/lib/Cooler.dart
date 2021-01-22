@@ -12,7 +12,7 @@ class Cooler extends StatefulWidget {
 }
 
 class _CoolerState extends State<Cooler> {
-  static String widget_name='Cooler';
+  static String widget_name = 'Cooler';
   @override
   Widget build(BuildContext context) {
     final CoolerConst device = ModalRoute.of(context).settings.arguments;
@@ -31,9 +31,9 @@ class _CoolerState extends State<Cooler> {
                   child: GestureDetector(
                     onTap: () async {
                       if (device.powerstate == state.OFF) {
-                        // await http.get("http://192.168.4.1/deviceon");
+                         http.get("http://192.168.4.1/deviceon");
                       } else {
-                        // await http.get("http://192.168.4.1/deviceoff");
+                         http.get("http://192.168.4.1/deviceoff");
                       }
                       setState(() {
                         device.powerstate = device.powerstate == state.ON
@@ -78,8 +78,8 @@ class _CoolerState extends State<Cooler> {
                               : Colors.black12,
                           child: FlatButton(
                             onPressed: () async {
-                              // await http.get("http://192.168.4.1/manualmode");
-                              if (device.powerstate == state.ON) {
+                               http.get("http://192.168.4.1/manualmode");
+                              if (true) {
                                 setState(() {
                                   device.modeT = mode.MANUAL;
                                 });
@@ -105,7 +105,7 @@ class _CoolerState extends State<Cooler> {
                               : Colors.black12,
                           child: FlatButton(
                             onPressed: () {
-                              if (device.powerstate == state.ON) {
+                              if (true) {
                                 setState(() {
                                   device.modeT = mode.AUTO;
                                 });
@@ -131,9 +131,8 @@ class _CoolerState extends State<Cooler> {
                             ),
                             FlatButton(
                                 onPressed: () async {
-                                  if (device.autoMode != auto.SUMMER &&
-                                      device.powerstate == state.ON) {
-                                    // http.get("http://192.168.4.1/summer");
+                                  if (device.autoMode != auto.SUMMER ) {
+                                    http.get("http://192.168.4.1/summer");
                                     setState(() {
                                       device.autoMode = auto.SUMMER;
                                     });
@@ -174,9 +173,8 @@ class _CoolerState extends State<Cooler> {
                             ),
                             FlatButton(
                                 onPressed: () {
-                                  if (device.autoMode != auto.WINTER &&
-                                      device.powerstate == state.ON) {
-                                    // http.get("http://192.168.4.1/winter");
+                                  if (device.autoMode != auto.WINTER) {
+                                    http.get("http://192.168.4.1/winter");
                                     setState(() {
                                       device.autoMode = auto.WINTER;
                                     });
@@ -216,9 +214,8 @@ class _CoolerState extends State<Cooler> {
                             ),
                             FlatButton(
                                 onPressed: () async {
-                                  if (device.autoMode != auto.MONSOON &&
-                                      device.powerstate == state.ON) {
-                                    // await http.get("http://192.168.4.1/monsoon");
+                                  if (device.autoMode != auto.MONSOON ) {
+                                    http.get("http://192.168.4.1/monsoon");
                                     setState(() {
                                       device.autoMode = auto.MONSOON;
                                     });
@@ -288,15 +285,37 @@ class _CoolerState extends State<Cooler> {
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(
-                                            color: Colors.blue[200],
-                                            borderRadius: BorderRadius.only(topLeft:Radius.circular(20),topRight: Radius.circular(20) )),
+                                                  color: Colors.blue[200],
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  20),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  20))),
                                               child: FlatButton(
                                                 child: Icon(Icons.add),
-                                                onPressed: () {
-                                                  if(device.speed<4){
-                                                    setState(() {
-                                                      device.speed++;
-                                                    });
+                                                onPressed: () async {
+                                                  if (device.powerstate ==
+                                                      state.ON) {
+                                                    if (device.speed < 4) {
+                                                      setState(() {
+                                                        device.speed++;
+                                                      });
+                                                      if (device.speed == 1) {
+                                                        http.get(
+                                                            "http://192.168.4.1/speed1");
+                                                      } else if (device.speed ==
+                                                          2) {
+                                                        http.get(
+                                                            "http://192.168.4.1/speed2");
+                                                      } else if (device.speed ==
+                                                          3) {
+                                                        http.get(
+                                                            "http://192.168.4.1/speed3");
+                                                      }
+                                                    }
                                                   }
                                                 },
                                               ),
@@ -316,16 +335,35 @@ class _CoolerState extends State<Cooler> {
                                               color: Colors.white,
                                             ),
                                             Container(
-                                               decoration: BoxDecoration(
-                                            color: Colors.blue[200],
-                                            borderRadius: BorderRadius.only(bottomLeft:Radius.circular(20),bottomRight: Radius.circular(20) )),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.blue[200],
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  20),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  20))),
                                               child: FlatButton(
                                                 child: Icon(Icons.remove),
-                                                onPressed: () {
-                                                  if(device.speed>1){
+                                                onPressed: () async {
+                                                  if (device.speed > 1) {
                                                     setState(() {
                                                       device.speed--;
                                                     });
+                                                  }
+                                                  if (device.speed == 1) {
+                                                     http.get(
+                                                        "http://192.168.4.1/speed1");
+                                                  } else if (device.speed ==
+                                                      2) {
+                                                     http.get(
+                                                        "http://192.168.4.1/speed2");
+                                                  } else if (device.speed ==
+                                                      3) {
+                                                     http.get(
+                                                        "http://192.168.4.1/speed3");
                                                   }
                                                 },
                                               ),
@@ -358,9 +396,16 @@ class _CoolerState extends State<Cooler> {
                                             ),
                                           ),
                                           GestureDetector(
-                                            onTap: () {
+                                            onTap: () async{
                                               if (device.powerstate ==
                                                   state.ON) {
+                                                    if(device.pump == state.ON){
+                                                       http.get(
+                                                        "http://192.168.4.1/pumpon");
+                                                    }else{
+                                                       http.get(
+                                                        "http://192.168.4.1/pumpoff");
+                                                    }
                                                 setState(() {
                                                   device.pump =
                                                       device.pump == state.ON
@@ -385,11 +430,12 @@ class _CoolerState extends State<Cooler> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20))),
                                         child: RaisedButton(
-                                          onPressed:(){
-                                            Navigator.pushReplacementNamed(context, '/timer',arguments: {
-                                              'widget': widget_name,
-                                            }
-                                            );
+                                          onPressed: () {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/timer',
+                                                arguments: {
+                                                  'widget': widget_name,
+                                                });
                                           },
                                           child: Text('TIMER BUTTON'),
                                         ),

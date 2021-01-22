@@ -31,12 +31,12 @@ String device_status, speed_status, Temperature, Water_level, auto_status;
 
 void handleRoot() {
   String s = MAIN_page;
-  s.replace("@@automode@@", auto_status);
-  s.replace("@@device@@", device_status);
-  s.replace("@@speed@@", speed_status);
-  s.replace("@@TEMP@@", Temperature);
-  s.replace("@@WATERLEVEL@@", Water_level);
-  server.send(200, "text/html", s);
+//  s.replace("@@automode@@", auto_status);
+//  s.replace("@@device@@", device_status);
+//  s.replace("@@speed@@", speed_status);
+//  s.replace("@@TEMP@@", Temperature);
+//  s.replace("@@WATERLEVEL@@", Water_level);
+//  server.send(200, "text/html", s);
 }
 
 void handleForm() {
@@ -559,7 +559,7 @@ void setup() {
   IPAddress myIP = WiFi.softAPIP();
   Serial.println(WiFi.softAPIP()); 
   server.on("/", handleRoot);
-  server.on("/speed1", requestingspeed1);
+//  server.on("/speed1", requestingspeed1);
   server.on("/speed2", requestingspeed2);
   server.on("/speed3", requestingspeed3);
   server.on("/speed4", requestingspeed4);
