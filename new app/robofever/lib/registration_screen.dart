@@ -5,20 +5,20 @@ import 'package:robofever/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class LoginScreen extends StatefulWidget {
-  static String id='LoginScreen';
+class RegistrationScreen extends StatefulWidget {
+  static String id = 'RegistrationScreen';
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   String email,password;
+  bool showspinner = false;
   final _auth=FirebaseAuth.instance;
-  bool showspinner_login = false;
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
-      inAsyncCall :showspinner_login,
+      inAsyncCall : showspinner,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     email = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your email',
+                    hintText:'Enter your e-mail',
                   ),
                 ),
               ),
@@ -62,21 +62,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     password = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your password',
+                    hintText:'Enter your password',
                   ),
                 ),
               ),
               SizedBox(
                 height: 24.0,
               ),
-              RoundedButton(onPressed: ()async {
+              RoundedButton(onPressed: () async {
                 setState(() {
-                  showspinner_login = true;
+                  showspinner = true;
                 });
-                try{
-                  final user = await _auth.signInWithEmailAndPassword(
+                try {
+                  final newUser = await _auth.createUserWithEmailAndPassword(
                       email: email, password: password);
-                  if (user != null) {
+                  if (newUser != null) {
                     Navigator.pushNamed(context, HomePage.id);
                   }
                 }
@@ -85,9 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   print(e);
                 }
                 setState(() {
-                  showspinner_login = false;
+                  showspinner = false;
                 });
-              },title:'Log in',colour:Colors.lightBlueAccent),
+              },title:'Register',colour:Colors.blueAccent),
             ],
           ),
         ),
