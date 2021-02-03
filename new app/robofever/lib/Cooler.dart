@@ -379,15 +379,15 @@ class _CoolerState extends State<Cooler> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (device.powerstate ==
-                                                  state.ON) {
-                                                setState(() {
-                                                  device.swing =
-                                                      device.swing == state.ON
-                                                          ? state.OFF
-                                                          : state.ON;
-                                                });
-                                              }
+                                              http.get("http://192.168.4.1/swingtogggle");
+                                              setState(() {
+                                                device.swing =
+                                                    device.swing == state.ON
+                                                        ? state.OFF
+                                                        : state.ON;
+
+                                              });
+
                                             },
                                             child: ToggleButton(
                                               icon: MdiIcons.waterPump,
@@ -425,20 +425,20 @@ class _CoolerState extends State<Cooler> {
                                       Container(
                                         height: size.height * 0.2,
                                         width: size.width * 0.65,
+                                        alignment: Alignment.center,
+                                        // padding: 2,
                                         decoration: BoxDecoration(
                                             color: Colors.lightGreen[200],
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20))),
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            Navigator.pushReplacementNamed(
-                                                context, '/timer',
-                                                arguments: {
-                                                  'widget': widget_name,
-                                                });
-                                          },
-                                          child: Text('TIMER BUTTON'),
-                                        ),
+                                        child: new GridView.builder(
+                itemCount: 4,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:  4
+                ),
+                itemBuilder: (context, index) {
+                  return buttonN(index+1,context);
+                }),
                                       )
                                     ],
                                   )
@@ -454,4 +454,25 @@ class _CoolerState extends State<Cooler> {
           ),
         ));
   }
+}
+
+
+Widget buttonN(index,context){
+  return Container(
+    height: 1,
+    child: FlatButton(
+      child: Text("$index",textAlign: TextAlign.center,),
+      onPressed: (){
+        if(index==1)
+          http.get("http://192.168.4.1/timer1");
+        else if(index==2)
+          http.get("http://192.168.4.1/timer2");
+        else if(index==3)
+          http.get("http://192.168.4.1/timer3");
+        else if(index==4)
+          http.get("http://192.168.4.1/timer4");
+      },
+      height: 0.2,
+    ),
+  );
 }
