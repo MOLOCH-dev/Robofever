@@ -401,10 +401,10 @@ class _CoolerState extends State<Cooler> {
                                                   state.ON) {
                                                     if(device.pump == state.ON){
                                                        http.get(
-                                                        "http://192.168.4.1/pumpon");
+                                                        "http://192.168.4.1/pumpoff");
                                                     }else{
                                                        http.get(
-                                                        "http://192.168.4.1/pumpoff");
+                                                        "http://192.168.4.1/pumpon");
                                                     }
                                                 setState(() {
                                                   device.pump =
