@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: WelcomeScreen.id,
+      initialRoute: HomePage.id,
       routes: {
         HomePage.id:(context)=>HomePage(),
         Sanitizer.id:(context)=>Sanitizer(),
